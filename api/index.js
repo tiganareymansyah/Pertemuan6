@@ -1,4 +1,5 @@
 import express  from "express";
+import { client } from "./postgresqldb.js";
 
 const app = express();
 
@@ -8,17 +9,21 @@ const app = express();
 app.use((req, _res, next) => {
     if(req.url === "/api/get") {
         console.log("Silahkan masuk");
-        next();
     }
-    else {
-        console.log("Url salah");
+    else if(req.url === "/api/getdbpostgresql") {
+        console.log("Silahkan masuk 1");
     }
+    next();
 });
 
 // route
 
 app.get("/api/get", async (_req, res) => {
     res.send("Tigana Reymansyah");
+});
+
+app.get("/api/getdbpostgresql", async (_req, res) => {
+    res.send((await client.query("SELECT * FROM mahasiswa")).rows);
 });
 
 app.listen(3000, () => console.log("Server sedang berjalan..."));
